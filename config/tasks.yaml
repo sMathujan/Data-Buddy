@@ -1,0 +1,161 @@
+schema_extraction_task:
+  description: |
+    Extract and analyze the database schema from the uploaded dataset.
+    
+    Dataset Information:
+    - File path: {dataset_path}
+    - File type: {file_type}
+    
+    Your task is to:
+    1. Load and examine the dataset structure
+    2. Identify all tables (or the main table for single-file uploads)
+    3. Extract column names, data types, and sample values
+    4. Identify potential relationships or constraints
+    5. Generate a comprehensive schema description
+    
+    Provide the schema information in a structured format that can be easily used
+    by other agents for SQL query generation.
+  expected_output: |
+    A comprehensive schema analysis including:
+    - Table name(s) and structure
+    - Column names with data types
+    - Sample values for each column
+    - Data quality observations
+    - Recommended query patterns
+    Format: Structured text with clear sections
+  agent: data_schema_agent
+
+sql_generation_task:
+  description: |
+    Convert the user's natural language query into accurate SQL.
+    
+    User Query: {user_query}
+    
+    Database Schema:
+    {database_schema}
+    
+    Your task is to:
+    1. Analyze the user's intent and requirements
+    2. Map the request to available tables and columns
+    3. Generate syntactically correct SQL using ONLY the provided schema
+    4. Ensure the query addresses the user's specific question
+    5. Use appropriate SQL constructs (SELECT, WHERE, GROUP BY, ORDER BY, etc.)
+    6. Add comments to explain complex parts of the query
+    
+    IMPORTANT CONSTRAINTS:
+    - Use ONLY tables and columns that exist in the provided schema
+    - Generate ONLY SELECT statements (no INSERT, UPDATE, DELETE, DROP)
+    - Include appropriate LIMIT clauses for large result sets
+    - Use proper SQL syntax for SQLite database
+  expected_output: |
+    A complete SQL query that:
+    - Is syntactically correct for SQLite
+    - Uses only existing tables and columns
+    - Addresses the user's question accurately
+    - Includes explanatory comments
+    - Has appropriate LIMIT clauses if needed
+    Format: Clean SQL code with comments
+  agent: sql_generator_agent
+
+sql_review_task:
+  description: |
+    Review and validate the generated SQL query for correctness, security, and performance.
+    
+    Generated SQL Query:
+    {generated_sql}
+    
+    Original User Query: {user_query}
+    Database Schema: {database_schema}
+    
+    Your task is to:
+    1. Verify the SQL syntax is correct for SQLite
+    2. Ensure all referenced tables and columns exist in the schema
+    3. Check that the query logic matches the user's intent
+    4. Identify any security risks or dangerous operations
+    5. Suggest performance optimizations if needed
+    6. Validate that only SELECT operations are used
+    7. Provide a safety assessment and execution recommendation
+    
+    SECURITY CHECKLIST:
+    - No DROP, DELETE, UPDATE, INSERT, or ALTER statements
+    - No system table access
+    - No SQL injection vulnerabilities
+    - Appropriate use of LIMIT clauses
+  expected_output: |
+    A comprehensive review including:
+    - Safety assessment (SAFE/UNSAFE)
+    - Syntax validation results
+    - Logic verification against user intent
+    - Performance recommendations
+    - Final execution recommendation (APPROVE/REJECT/MODIFY)
+    - If modifications needed, provide the corrected SQL
+    Format: Structured review with clear recommendations
+  agent: sql_reviewer_agent
+  human_input: true
+
+data_execution_task:
+  description: |
+    Execute the approved SQL query against the database and return results.
+    
+    Approved SQL Query:
+    {approved_sql}
+    
+    Database Connection: {database_path}
+    
+    Your task is to:
+    1. Connect to the SQLite database
+    2. Execute the approved SQL query
+    3. Capture and format the results
+    4. Provide execution statistics (rows returned, execution time)
+    5. Handle any runtime errors gracefully
+    6. Return results in a structured format
+    
+    EXECUTION GUIDELINES:
+    - Set appropriate query timeouts
+    - Limit result sets to prevent memory issues
+    - Log execution details for transparency
+    - Handle database connection errors
+  expected_output: |
+    Query execution results including:
+    - Query results in tabular format
+    - Number of rows returned
+    - Execution time
+    - Any warnings or errors
+    - Success/failure status
+    Format: Structured data with metadata
+  agent: data_execution_agent
+
+data_analysis_task:
+  description: |
+    Analyze the query results and generate insights and visualization recommendations.
+    
+    Query Results:
+    {query_results}
+    
+    Original User Query: {user_query}
+    
+    Your task is to:
+    1. Analyze the data patterns and trends
+    2. Generate statistical summaries where appropriate
+    3. Identify key insights and findings
+    4. Recommend suitable visualization types
+    5. Provide natural language explanations of the results
+    6. Suggest follow-up questions or analyses
+    
+    ANALYSIS GUIDELINES:
+    - Focus on answering the user's original question
+    - Provide context and interpretation of numbers
+    - Identify outliers or anomalies if present
+    - Suggest actionable insights where possible
+    - Keep explanations accessible to non-technical users
+  expected_output: |
+    Comprehensive analysis including:
+    - Key findings and insights
+    - Statistical summaries (if applicable)
+    - Recommended visualization types
+    - Natural language explanation of results
+    - Suggested follow-up questions
+    - Data quality observations
+    Format: Structured analysis with clear sections
+  agent: data_analyst_agent
+
