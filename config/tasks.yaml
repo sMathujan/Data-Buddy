@@ -91,7 +91,7 @@ sql_review_task:
     - If modifications needed, provide the corrected SQL
     Format: Structured review with clear recommendations
   agent: sql_reviewer_agent
-  human_input: true
+  human_input: false
 
 data_execution_task:
   description: |

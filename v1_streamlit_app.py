@@ -20,7 +20,7 @@ from utils.cost_tracker import CostTracker
 
 # Configure Streamlit page
 st.set_page_config(
-    page_title="Data Buddy - Vibing with your Data",
+    page_title="CrewAI Tabular Data Agent",
     page_icon="🤖",
     layout="wide",
     initial_sidebar_state="expanded"
@@ -88,7 +88,8 @@ def main():
     """Main Streamlit application"""
     
     # Header
-    st.markdown('<h1 class="main-header">🤖 Data Buddy - Vibing with your Data</h1>', unsafe_allow_html=True)
+    st.markdown('<h1 class="main-header">🤖 CrewAI Tabular Data Agent</h1>', unsafe_allow_html=True)
+    st.markdown("**Multi-Agent SQL Assistant with Human-in-the-Loop & Cost Control**")
     
     # Sidebar
     with st.sidebar:
@@ -115,6 +116,16 @@ def main():
                 
         st.divider()
         
+        # Agent Status
+        st.header("🤖 Agent Status")
+        display_agent_status()
+        
+        st.divider()
+        
+        # Cost Tracking
+        st.header("💰 Cost Tracking")
+        display_cost_summary()
+    
     # Main content area
     if not st.session_state.dataset_loaded:
         display_welcome_screen()
@@ -192,15 +203,42 @@ def display_dataset_preview(file_path):
 def display_welcome_screen():
     """Display welcome screen when no dataset is loaded"""
     st.markdown("""
-    ## Welcome to Data Buddy! 🚀
+    ## Welcome to CrewAI Tabular Data Agent! 🚀
     
     This advanced multi-agent system helps you analyze tabular data using natural language queries.
+    
+    ### 🌟 Key Features:
+    - **Multi-Agent Architecture**: Specialized AI agents for different tasks
+    - **Human-in-the-Loop**: Review and approve SQL queries before execution
+    - **Cost Transparency**: Track LLM usage and costs in real-time
+    - **Security First**: Only safe SELECT queries are executed
+    - **Interactive Visualizations**: Automatic chart generation
     
     ### 🚀 How It Works:
     1. **Upload** your CSV, Excel, or JSON file
     2. **Ask** questions in natural language
-    3. **Explore** results 
+    3. **Review** the generated SQL query
+    4. **Approve** or modify the query
+    5. **Explore** results with interactive visualizations
+    
+    ### 🤖 Meet Your AI Team:
     """)
+    
+    agents_info = [
+        ("🔍 Schema Analyst", "Analyzes your data structure and extracts schema information"),
+        ("💻 SQL Generator", "Converts your questions into precise SQL queries"),
+        ("🛡️ Security Reviewer", "Validates queries for safety and correctness"),
+        ("⚡ Query Executor", "Safely executes approved queries"),
+        ("📊 Data Analyst", "Generates insights and visualization recommendations")
+    ]
+    
+    for agent_name, description in agents_info:
+        st.markdown(f"""
+        <div class="agent-card">
+            <strong>{agent_name}</strong><br>
+            {description}
+        </div>
+        """, unsafe_allow_html=True)
     
     st.markdown("### 📁 Get Started")
     st.info("👈 Upload your dataset using the sidebar to begin!")
