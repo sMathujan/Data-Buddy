@@ -2,7 +2,6 @@ crewai>=0.80.0
 crewai-tools>=0.20.0
 streamlit>=1.47.0
 pandas>=2.0.0
-plotly>=5.17.0
 sqlite3
 openai>=1.97.0
 python-dotenv>=1.0.0
