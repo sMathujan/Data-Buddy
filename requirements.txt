@@ -3,7 +3,6 @@ crewai-tools>=0.20.0
 streamlit>=1.47.0
 numpy==1.26.4
 pandas==2.2.2
-sqlite3
 openai>=1.97.0
 python-dotenv>=1.0.0
 pydantic>=2.0.0
