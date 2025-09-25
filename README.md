@@ -287,5 +287,5 @@ For questions, issues, or feature requests:
 
 ---
 
-**Built with ❤️ using CrewAI and modern AI technologies**
+**Built with ❤️ by sMathujan**
 

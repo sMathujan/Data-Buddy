@@ -21,7 +21,7 @@ sql_generator_agent:
     your queries are accurate and use only existing tables and columns.
   allow_delegation: false
   verbose: true
-  model: gpt-4.1-mini
+  model: gpt-o4-mini
   temperature: 0.2
 
 sql_reviewer_agent:
