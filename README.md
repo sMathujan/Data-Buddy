@@ -288,5 +288,5 @@ For questions, issues, or feature requests:
 
 ---
 
-**Built with ❤️ by sMathujan**
+**Built with ❤️ by sMathujan **
 
